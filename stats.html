@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats & Progress - Codex Study Hub</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            padding: 20px;
+        }
+        .stats-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        h1 { color: var(--primary-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 30px; }
+        
+        .subject-stats-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+        .subject-stats-card h2 {
+            margin-top: 0;
+            color: var(--success-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        /* --- Chart and Summary Layout --- */
+        .stat-details {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .summary-list {
+            list-style: none;
+            padding: 0;
+            flex-grow: 1;
+        }
+        .summary-list li {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--border-color);
+        }
+        .summary-list strong {
+            color: var(--primary-color);
+        }
+
+        /* --- Pie Chart Styling (Pure CSS) --- */
+        .pie-chart-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--success-color) 0%,
+                var(--success-color) var(--correct-percentage),
+                var(--danger-color) var(--correct-percentage),
+                var(--danger-color) calc(var(--correct-percentage) + var(--incorrect-percentage)),
+                var(--warning-color) calc(var(--correct-percentage) + var(--incorrect-percentage))
+            );
+            position: relative;
+            margin: 0 auto;
+            flex-shrink: 0;
+        }
+        .pie-chart-container::after {
+            content: attr(data-percent);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            border-radius: 50%;
+            width: 70%;
+            height: 70%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .no-data {
+            color: var(--secondary-color);
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="stats-container">
+    <h1>📊 Stats & Progress Hub</h1>
+    <div class="back-home">
+        <button onclick="window.location.href='home.html'" style="padding: 10px 15px; background: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; margin-bottom: 20px;">
+            ← Back to Subjects
+        </button>
+    </div>
+
+    <div id="statsContent">
+        <div class="no-data" id="noDataMessage" style="display: none;">
+            <p>No test history found yet. Complete a test session to view your progress!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', loadAndProcessHistory);
+
+    function loadAndProcessHistory() {
+        const historyString = localStorage.getItem('cbtHistory');
+        const statsContent = document.getElementById('statsContent');
+        const noDataMessage = document.getElementById('noDataMessage');
+
+        if (!historyString) {
+            noDataMessage.style.display = 'block';
+            return;
+        }
+
+        const history = JSON.parse(historyString);
+        if (history.length === 0) {
+            noDataMessage.style.display = 'block';
+            return;
+        }
+
+        // --- 1. Aggregate Data by Subject ---
+        const subjectStats = history.reduce((acc, test) => {
+            const subject = test.subject;
+            
+            if (!acc[subject]) {
+                acc[subject] = {
+                    totalTests: 0,
+                    totalAnswered: 0,
+                    totalScore: 0,
+                    totalIncorrect: 0,
+                    totalUnanswered: 0,
+                    totalQuestions: 0,
+                    avgDuration: 0,
+                    durationSum: 0
+                };
+            }
+
+            acc[subject].totalTests++;
+            acc[subject].totalScore += test.score;
+            acc[subject].totalIncorrect += test.incorrect;
+            acc[subject].totalUnanswered += test.unanswered;
+            acc[subject].totalQuestions += test.totalQuestions;
+            acc[subject].durationSum += test.duration;
+            acc[subject].totalAnswered += (test.score + test.incorrect);
+
+            return acc;
+        }, {});
+
+        // --- 2. Calculate Averages and Percentages ---
+        for (const subject in subjectStats) {
+            const stats = subjectStats[subject];
+            
+            stats.overallAccuracy = stats.totalQuestions > 0 
+                ? Math.round((stats.totalScore / stats.totalQuestions) * 100) 
+                : 0;
+
+            stats.answeredPercentage = stats.totalQuestions > 0
+                ? Math.round((stats.totalAnswered / stats.totalQuestions) * 100)
+                : 0;
+
+            stats.incorrectPercentage = stats.totalAnswered > 0
+                ? Math.round((stats.totalIncorrect / stats.totalAnswered) * 100)
+                : 0;
+            
+            stats.correctPercentage = 100 - stats.incorrectPercentage;
+            
+            stats.unansweredRate = stats.totalQuestions > 0
+                ? Math.round((stats.totalUnanswered / stats.totalQuestions) * 100)
+                : 0;
+
+            stats.avgDuration = Math.round(stats.durationSum / stats.totalTests);
+        }
+
+        // --- 3. Render Stats Cards ---
+        for (const subject in subjectStats) {
+            statsContent.appendChild(createSubjectCard(subject, subjectStats[subject]));
+        }
+    }
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}m ${remainingSeconds}s`;
+    }
+
+    // REPLACE createSubjectCard in stats.html with this:
+
+function createSubjectCard(subject, stats) {
+    const card = document.createElement('div');
+    card.className = 'subject-stats-card';
+
+    // Calculate CSS percentages ONLY if there are answered questions (totalAnswered > 0)
+    let correctPercentCSS = '0%';
+    let incorrectPercentCSS = '0%';
+    const totalAnswered = stats.totalScore + stats.totalIncorrect;
+
+    if (totalAnswered > 0) {
+        // We use Math.round to get clean percentages for the conic-gradient
+        const correctRatio = (stats.totalScore / totalAnswered) * 100;
+        const incorrectRatio = (stats.totalIncorrect / totalAnswered) * 100;
+        
+        correctPercentCSS = `${Math.round(correctRatio)}%`;
+        incorrectPercentCSS = `${Math.round(incorrectRatio)}%`;
+    }
+    
+    // Fallback for Overall Accuracy percentage display
+    const overallAccuracyPercent = stats.totalQuestions > 0 
+        ? Math.round((stats.totalScore / stats.totalQuestions) * 100) 
+        : 0;
+
+    const pieChart = `
+        <div class="pie-chart-container" 
+             data-percent="${overallAccuracyPercent}%"
+             style="--correct-percentage: ${correctPercentCSS}; 
+                    --incorrect-percentage: ${incorrectPercentCSS};">
+        </div>
+    `;
+    
+    // Ensure totalQuestions is displayed correctly (not NaN)
+    const totalQDisplay = stats.totalQuestions > 0 ? stats.totalQuestions : 0;
+    
+    card.innerHTML = `
+        <h2>${subject} Performance</h2>
+        <div class="stat-details">
+            ${pieChart}
+            <ul class="summary-list">
+                <li><strong>Overall Accuracy:</strong> ${overallAccuracyPercent}% (${stats.totalScore} correct / ${totalQDisplay} total)</li>
+                <li><strong>Answered Correctly:</strong> <span style="color: var(--success-color);">${stats.totalScore}</span></li>
+                <li><strong>Answered Incorrectly:</strong> <span style="color: var(--danger-color);">${stats.totalIncorrect}</span></li>
+                <li><strong>Unanswered Questions:</strong> <span style="color: var(--warning-color);">${stats.totalUnanswered}</span> (${stats.unansweredRate}% rate)</li>
+                <li><strong>Tests Completed:</strong> <strong>${stats.totalTests}</strong></li>
+                <li><strong>Avg. Time per Test:</strong> ${formatTime(stats.avgDuration)}</li>
+            </ul>
+        </div>
+    `;
+    
+    return card;
+}
+</script>
+</body>
+</html>

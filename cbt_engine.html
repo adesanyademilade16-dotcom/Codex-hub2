@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex CBT Engine</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9642494442871029"
+     crossorigin="anonymous"></script>
+    <style>
+        /* --- Global Styles and Variables --- */
+        :root {
+            --primary-color: #007bff;
+            --accent-color: #28a745;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --dark-text: #343a40;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            padding: 0;
+            margin: 0;
+        }
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+            padding: 10px; /* Reduced padding for mobile */
+            max-width: 1200px;
+            margin: auto;
+            gap: 20px;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+        }
+
+        /* --- Header Styling (Fixed at the top for better visibility) --- */
+        .test-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: var(--card-bg);
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .test-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+        }
+        #finishTestBtn {
+            padding: 8px 15px;
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 0.5rem;
+            font-weight:300px;
+        }
+
+        /* --- Timer Styling (Integrated into the header on mobile) --- */
+        .timer-box {
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 30px;
+            background-color: #f8e6e6; 
+            border: 1px solid var(--danger-color);
+            margin: 0 15px; 
+        }
+        .timer-box h3 {
+            margin: 0;
+            font-size: 0.6rem;
+            color: var(--dark-text);
+        }
+        #timerDisplay, #timerDisplayMobile {
+            font-size: 1.5rem; 
+            font-weight: 600;
+            color: var(--danger-color);
+            line-height: 1.1;
+            margin: 0;
+        }
+        .timer-box.warning {
+            background-color: #fff3cd; 
+            border-color: var(--warning-color);
+        }
+        .warning-text {
+            color: var(--warning-color) !important;
+        }
+
+        /* --- Question Card --- */
+        .question-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        #questionNumber {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        #questionText {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--dark-text);
+            min-height: 50px;
+        }
+        
+        /* --- Options List --- */
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .option-item {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .option-label {
+            display: block;
+            background-color: #f1f1f1;
+            padding: 12px; 
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            border: 2px solid transparent;
+            font-size: 1rem;
+            color: var(--dark-text);
+        }
+        .option-label:hover {
+            background-color: #e9e9e9;
+        }
+        .option-item input[type="radio"] {
+            display: none;
+        }
+        .option-item input[type="radio"]:checked + .option-label {
+            background-color: #d4edda; 
+            border-color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        /* --- Navigation Controls (Bottom Bar for Mobile) --- */
+        .navigation-controls {
+            position: sticky;
+            bottom: 0;
+            z-index: 5;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+        }
+        .nav-btn {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #prevBtn {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        #nextBtn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        #prevBtn:disabled, #nextBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* --- Sidebar/Navigator Styling --- */
+        .sidebar-panel {
+            padding: 15px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        /* Progress Bar Styling */
+        .progress-container {
+            padding: 10px; 
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+        .progress-bar {
+            height: 12px;
+            background-color: var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .progress-bar-inner {
+            height: 100%;
+            width: 0%; 
+            background-color: var(--accent-color);
+            transition: width 0.4s ease-in-out;
+        }
+        .progress-bar-inner.high-progress {
+            background-color: var(--primary-color);
+        }
+
+        /* Question Navigator Grid Fix */
+        .navigator-title {
+            font-size: 1.2rem;
+            color: var(--dark-text);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        #navContainer {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr); /* 6 columns wide */
+            gap: 8px; /* Smaller gap */
+        }
+        .nav-button {
+            padding: 8px 0; /* Reduced padding */
+            border: 1px solid var(--secondary-color);
+            background-color: #f1f1f1;
+            color: var(--dark-text);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+   #calcBtn {
+   padding: 6px 8px;
+   background: #343a40;
+   color: white;
+   border: none;
+   border-radius: 100px;
+   cursor: pointer;
+   font-size: 0.6rem;
+   min-width: 40px;
+   font-weight:300px:    
+   }
+        @media (max-width: 360px) {
+        #calcBtn {
+        font-size: 0.7rem;
+        padding: 5px 6px;
+        min-width: 70px;
+        }
+        }
+        /* Calculator Popup */
+        .calculator {
+        position: fixed;
+        bottom: 20px;
+        right: 40px;
+       width:90%;
+        max-width: 260px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        display: none;
+        z-index: 9999;
+        }
+        
+        .calc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #007bff;
+        color: white;
+        padding: 8px 10px;
+        border-radius: 10px 10px 0 0;
+        }
+        
+        .calc-header button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        }
+        
+        #calcDisplay {
+        width: 90%;
+        height: 45px;
+        font-size: 1.2rem;
+        text-align: right;
+        padding: 5px;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        }
+        
+        .calc-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        }
+        
+      .calc-buttons button {
+      padding: 10px;
+      font-size: 0.9rem;
+      border: 1px solid #eee;
+      background: #f8f9fa;
+      cursor: pointer;
+      }
+        
+        .calc-buttons button:hover {
+        background: #e9ecef;
+        }
+        
+        .calc-buttons .clear {
+        grid-column: span 4;
+        background: #dc3545;
+        color: white;
+        }
+        .nav-button.current {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .nav-button.answered {
+            background-color: var(--success-color);
+            color: white;
+            border-color: var(--success-color);
+        }
+        .nav-button.answered.current {
+             background-color: #1e7e34; /* Darker green */
+        }
+
+        /* --- Media Queries for Desktop Layout --- */
+        @media (min-width: 900px) {
+            .app-layout {
+                padding: 20px;
+            }
+            /* Timer for desktop is in the sidebar */
+            .test-header #mobileTimerBox {
+                display: none !important; 
+            }
+            .sidebar #timerBox {
+                display: block !important;
+            }
+            .navigation-controls {
+                position: static; 
+                background-color: transparent;
+            }
+        }
+
+        /* Force Mobile Layout */
+        @media (max-width: 899px) {
+            .sidebar {
+                width: 100%;
+                order: 3; /* Move sidebar/navigator below main content */
+            }
+            .app-layout {
+                flex-direction: column; /* Stack main and sidebar */
+            }
+            .sidebar #timerBox {
+                display: none !important; /* Hide the sidebar timer on mobile */
+            }
+            .test-header #mobileTimerBox {
+                display: flex !important; /* Show the mobile header timer */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-layout">
+    <div class="main-content">
+        <div class="test-header">
+            <h2 id="subjectTitle">MTH101</h2>
+            
+            <div id="mobileTimerBox" class="timer-box" style="display: none;">
+                <h3>TIME</h3>
+                <p id="timerDisplayMobile">--:--</p>
+            </div>
+            <button id="calcBtn" onclick="toggleCalculator()">🧮 Cal</button>
+            <button id="finishTestBtn" onclick="confirmSubmission()">FINISH TEST</button>
+        </div>
+     <div class="question-card">
+            <p id="questionNumber">Question X of Y</p>
+            <p id="questionTopic">Topic:</p>
+            <p id="questionText">The question text will appear here.</p>
+
+            <ul id="optionsList" class="options-list">
+                </ul>
+
+            <div class="navigation-controls">
+                <button id="prevBtn" class="nav-btn">← Previous</button>
+                <button id="nextBtn" class="nav-btn">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-panel">
+            <div id="timerBox" class="timer-box" style="display: none;">
+                <h3>Time Remaining</h3>
+                <p id="timerDisplay">--:--</p> 
+            </div>
+<div class="calculator" id="calculator" onmousedown="startDrag(event)" ontouchstart="startDrag(event)">
+    <div class="calc-header">
+        <span>Calculator</span>
+        <button onclick="toggleCalculator()">✖</button>
+    </div>
+
+    <input type="text" id="calcDisplay" readonly>
+
+    <div class="calc-buttons">
+        <button onclick="calcInput('7')">7</button>
+        <button onclick="calcInput('8')">8</button>
+        <button onclick="calcInput('9')">9</button>
+        <button onclick="calcInput('/')">÷</button>
+
+        <button onclick="calcInput('4')">4</button>
+        <button onclick="calcInput('5')">5</button>
+        <button onclick="calcInput('6')">6</button>
+        <button onclick="calcInput('*')">×</button>
+
+        <button onclick="calcInput('1')">1</button>
+        <button onclick="calcInput('2')">2</button>
+        <button onclick="calcInput('3')">3</button>
+        <button onclick="calcInput('-')">−</button>
+
+        <button onclick="calcInput('0')">0</button>
+        <button onclick="calcInput('.')">.</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="calcInput('+')">+</button>
+<button onclick="squareRoot()">√</button>
+        <button class="clear" onclick="clearCalc()">C</button>
+    </div>
+</div>
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span>Progress</span>
+                    <span id="progressCount">0 / 0</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progressBarInner" class="progress-bar-inner"></div>
+                </div>
+            </div>
+
+            <div class="navigator-title">Question Navigator</div>
+            <div id="navContainer">
+                </div>
+        </div>
+    </div>
+</div>
+
+<script src="cbt.js"></script>
+</body>
+
+</html>

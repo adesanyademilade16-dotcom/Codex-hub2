@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Study Hub - Select Subject</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --accent-color: #28a745;
+            --secondary-color: #6c757d;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .app-shell {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+        .mode-indicator {
+            font-size: 1.2rem;
+            color: #343a40;
+            font-weight: 500;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .subject-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .subject-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-color);
+        }
+        .code {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        .name {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        /* Lock badge for locked subjects */
+        .lock-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Trial counter */
+        .trial-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffc107;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .back-button {
+            padding: 10px 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div class="header">
+        <button class="back-button" onclick="window.location.href='home.html'">
+            ← Back to Categories
+        </button>
+        <h1>Select Your Subject</h1>
+        <p class="mode-indicator" id="modeDisplay"></p>
+    </div>
+
+    <div class="subject-grid" id="subjectGrid"></div>
+</div>
+
+<script>
+    const SUBJECT_DATA = [
+        { code: "MTH101", name: "Mathematics", icon: "🔢" },
+        { code: "PHY101", name: "Physics", icon: "⚙️" },
+        { code: "CHM101", name: "Chemistry", icon: "🧪" },
+        { code: "COS101", name: "Computer Science", icon: "💻" },
+        { code: "STA111", name: "Statistics", icon: "📊" },
+        { code: "STA121", name: "Statistics 2", icon: "📊" },
+        { code: "BIO101", name: "Biology", icon: "🧬" },
+        { code: "GST", name: "General Studies (English)", icon: "🇬🇧" },
+        { code: "GES151", name: "Agriculture", icon: "🌱" }
+    ];
+    
+    let currentMode = null;
+
+    document.addEventListener('DOMContentLoaded', initializeSubjectSelection);
+
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    function initializeSubjectSelection() {
+        const mode = getQueryParameter('mode');
+        currentMode = mode;
+
+        if (!mode) {
+            alert('Error: Mode not selected. Returning to Home.');
+            window.location.href = 'home.html';
+            return;
+        }
+
+        const modeText = mode === 'read' ? 'Reading / Study Notes' : 'Practice / Exam Mode';
+        document.getElementById('modeDisplay').textContent = `You are currently in: ${modeText}`;
+
+        const grid = document.getElementById('subjectGrid');
+        SUBJECT_DATA.forEach(subject => {
+            const card = document.createElement('div');
+            card.className = 'subject-card';
+            
+            // Check if subject is locked (after 3 trials)
+            const trialKey = `trials_${subject.code}`;
+            const trials = parseInt(localStorage.getItem(trialKey) || '0');
+            const isUnlocked = localStorage.getItem(`unlocked_${subject.code}`) === 'true';
+            const isLocked = !isUnlocked && trials >= 3;
+
+            // Add badge
+            let badge = '';
+            if (isLocked) {
+                badge = '<div class="lock-badge">🔒 LOCKED</div>';
+            } else if (trials > 0) {
+                const remaining = Math.max(0, 3 - trials);
+                badge = `<div class="trial-badge">${remaining} Trials</div>`;
+            }
+
+            card.innerHTML = `
+                ${badge}
+                <div class="code">${subject.icon} ${subject.code}</div>
+                <div class="name">${subject.name}</div>
+            `;
+
+            if (isLocked) {
+                card.style.opacity = '0.6';
+                card.style.cursor = 'not-allowed';
+                card.onclick = () => {
+                    alert(`❌ ${subject.code} is locked.\n\nYou have used your 3 free trials.\n\nGo to Home → Unlock a Subject to enter your verification key.`);
+                };
+            } else {
+                card.onclick = () => selectSubject(subject.code, currentMode);
+            }
+            
+            grid.appendChild(card);
+        });
+    }
+
+    function selectSubject(subjectCode, mode) {
+        // Track when subject is accessed (for time tracking)
+        const accessKey = `access_time_${subjectCode}`;
+        localStorage.setItem(accessKey, new Date().toISOString());
+
+        if (mode === 'read') {
+            window.location.href = `notes_display.html?subject=${subjectCode}`;
+        } else if (mode === 'practice') {
+            window.location.href = `topic_exam_selection.html?subject=${subjectCode}`;
+        }
+    }
+</script>
+</body>
+</html>

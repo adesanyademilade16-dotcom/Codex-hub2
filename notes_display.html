@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Study Hub - Study Notes</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --accent-color: #28a745;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .app-shell {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+        .subject-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #343a40;
+            margin-top: 5px;
+        }
+        /* --- Topic List --- */
+        .topic-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .topic-card {
+            background-color: #e9f5ff; /* Light blue background for notes */
+            border-left: 5px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .topic-card:hover {
+            background-color: #d0e8ff;
+            transform: translateY(-2px);
+        }
+        .topic-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        /* --- Notes Display Area (Modal/Fixed) --- */
+        #notesDisplayArea {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--card-bg);
+            display: none; /* Initially hidden */
+        }
+        #notesContent {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #495057;
+            white-space: pre-wrap; /* Preserve formatting in notes */
+        }
+        #notesTopicTitle {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: var(--secondary-color);
+            color: Blue
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div class="header">
+        <button class="back-button" onclick="window.location.href='subject_selection.html?mode=read'">
+            ← Back to Subjects
+        </button>
+        <h1>Study Notes</h1>
+        <div id="subjectName" class="subject-title"></div>
+        <p>Select a topic to view key notes and formulas.</p>
+    </div>
+
+    <div class="topic-list" id="topicList">
+        </div>
+
+    <div id="notesDisplayArea">
+        <h3 id="notesTopicTitle"></h3>
+        <p id="notesContent"></p>
+    </div>
+</div>
+
+<script>
+    // --- 1. CORE STUDY CONTENT DATA (Same as before, but ensure full) ---
+  const STUDY_CONTENT = {
+    "MTH101": {
+        name: "Mathematics",
+        resourceKey: "MTH",
+        topics: [
+            { 
+                name: "Set Theory", 
+                notes: "A set is a well-defined collection of distinct objects called elements.\n\nOperations:\n- Union (A ∪ B): All elements in A or B.\n- Intersection (A ∩ B): Elements in both A and B.\n- Difference (A − B): Elements in A but not in B.\n- Complement (A'): Elements not in A.\n\nExample: If A = {1,2,3}, B = {2,3,4}, then A ∪ B = {1,2,3,4}, A ∩ B = {2,3}, A − B = {1}\n- Cardinality: Number of elements in a set |A|.\n",
+                link: "https://byjus.com/maths/sets/"
+            },
+            { 
+                name: "Number Systems", 
+                notes: "Number systems include:\n- Natural numbers: 1,2,3...\n- Integers: ..., -2,-1,0,1,2...\n- Rational numbers: a/b\n- Irrational numbers: √2, π\n- Real numbers: rational + irrational\n\nConversions between Binary, Decimal, Octal, Hexadecimal are important.\nExample: Decimal 10 = Binary 1010",
+                link: "https://byjus.com/maths/number-system/"
+            },
+            { 
+                name: "Mathematical Induction", 
+                notes: "Used to prove statements true for all natural numbers.\nSteps:\n1. Base Case: Verify P(1)\n2. Inductive Step: Assume P(k) is true, prove P(k+1)\n\nExample: Prove 1+2+...+n = n(n+1)/2",
+                link: "https://byjus.com/maths/principle-of-mathematical-induction-learn-examples/"
+            },
+            { 
+                name: "Sequences & Series", 
+                notes: "Sequences: ordered list of numbers (a₁, a₂,...)\nSeries: sum of sequence terms\nAP (Arithmetic Progression): a, a+d, a+2d ... Sum: Sₙ = n/2 [2a + (n-1)d]\nGP (Geometric Progression): a, ar, ar² ... Sum: Sₙ = a(1-rⁿ)/(1-r)\nExample: AP: 2,4,6,8 → S₄ = 20\nGP: 3,6,12 → S₃ = 21",
+                link: "https://byjus.com/maths/sequence-and-series/"
+            },
+            { 
+                name: "Quadratic Equations", 
+                notes: "Form: ax² + bx + c = 0\nSolution: x = [-b ± √(b²-4ac)] / 2a\nDiscriminant D = b²-4ac:\n- D>0: 2 real roots\n- D=0: 1 real root\n- D<0: 2 complex roots",
+                link: "https://byjus.com/maths/sets//math/algebra/"
+            },
+            { 
+                name: "Complex Numbers", 
+                notes: "Form: a + bi, i² = −1\nConjugate: a − bi\nModulus: |a+bi| = √(a²+b²)\nOperations: addition, subtraction, multiplication, division\nExample: (2+3i) + (1-2i) = 3+i",
+                link: "https://byjus.com/maths/complex-numbers/"
+            },
+            { 
+                name: "Trigonometry", 
+                notes: "SOH CAH TOA for right triangles\nIdentities:\n- sin²θ + cos²θ = 1\n- 1 + tan²θ = sec²θ\n- 1 + cot²θ = csc²θ\nExample: sin30° = 1/2, cos60° = 1/2, tan45° = 1",
+                link: "https://byjus.com/maths/trigonometry/"
+            }
+        ]
+    },
+
+    "PHY101": {
+        name: "Physics",
+        resourceKey: "PHY",
+        topics: [
+            { 
+                name: "Units & Dimensions", 
+                notes: "Fundamental SI units: meter (m), kilogram (kg), second (s), ampere (A), kelvin (K), mole (mol), candela (cd)\nDimensional analysis checks equation consistency\nExample: Energy [M][L]²[T]⁻²",
+                link: "https://byjus.com/jee/units-and-dimensions/"
+            },
+            { 
+                name: "Vectors & Scalars", 
+                notes: "Scalars: magnitude only (mass, temperature)\nVectors: magnitude + direction (force, velocity)\nOperations: addition, subtraction, dot & cross products\nExample: Displacement = 5m north, Velocity = 20m/s east",
+                link: "https://byjus.com/maths/what-are-vector-and-scalar-quantities/"
+            },
+            { 
+                name: "Newton’s Laws", 
+                notes: "1st Law: Inertia\n2nd Law: F = ma\n3rd Law: Action = Reaction\nApplications: motion, friction, rockets",
+                link: "https://www.britannica.com/science/Newtons-laws-of-motion"
+            },
+            { 
+                name: "Kinematics", 
+                notes: "Equations of motion (constant acceleration):\nv = u + at\ns = ut + ½at²\nv² = u² + 2as\nWhere u = initial velocity, v = final velocity, a = acceleration, s = displacement, t = time",
+                link: "https://www.britannica.com/science/kinematics"
+            },
+            { 
+                name: "Center of Mass", 
+                notes: "Average position of mass in a system: x_cm = (Σ m_i x_i) / Σ m_i\nUsed in balancing, collision, and motion problems",
+                link: "https://byjus.com/jee/center-of-mass/"
+            },
+            { 
+                name: "Work, Energy, Power", 
+                notes: "Work W = F × d × cosθ\nKinetic Energy KE = ½mv²\nPotential Energy PE = mgh\nPower P = Work / time\nConservation of energy: Total energy remains constant",
+                link: "https://byjus.com/physics/work-energy-power/"
+            },
+            { 
+                name: "Thermodynamics", 
+                notes: "0th Law: Thermal equilibrium\n1st Law: ΔU = Q − W\n2nd Law: Entropy of isolated system never decreases\n3rd Law: Absolute zero unattainable",
+                link: "https://www.britannica.com/science/thermodynamics"
+            }
+        ]
+    },
+
+    "CHM101": {
+        name: "Chemistry",
+        resourceKey: "CHM",
+        topics: [
+            { name: "Atomic Structure", notes: "Atoms: protons (+), neutrons (0) in nucleus, electrons (−) in shells\nAtomic number = #protons, Mass number = protons + neutrons\nElectron configuration: shows distribution in shells (1s²,2s²,2p⁶…)", link: "https://www.britannica.com/science/atom/Atomic-bonds" },
+            { name: "Chemical Bonding", notes: "Ionic bonds: electron transfer (NaCl)\nCovalent bonds: electron sharing (H₂O)\nMetallic bonds: delocalized electrons (Fe, Al)\nBond polarity and strength are important.", link: "https://www.britannica.com/science/chemical-bonding" },
+            { name: "Stoichiometry", notes: "Mole concept: n = mass / molar mass\nBalanced reactions allow calculation of reactants/products\nExample: 2H₂ + O₂ → 2H₂O", link: "https://byjus.com/jee/stoichiometry-and-stoichiometric-calculations/" },
+            { name: "Acids and Bases", notes: "Definitions:\n- Arrhenius: Acid → H⁺, Base → OH⁻\n- Brønsted-Lowry: Acid donates H⁺, Base accepts H⁺\n- Lewis: Acid accepts electron pair, Base donates electron pair\npH = −log[H⁺], pOH = −log[OH⁻], pH + pOH = 14", link: "https://www.britannica.com/science/acid-base-reaction" },
+            { name: "Reaction Kinetics", notes: "Study of reaction rate\nRate law: rate = k[A]^m[B]^n\nFactors: concentration, temperature, catalysts\nHalf-life: time for half reactant to react\nExample: 2A → B, rate = k[A]²", link: "https://www.britannica.com/science/reaction-rate" }
+        ]
+    },
+
+    "COS101": {
+        name: "Computer Science",
+        resourceKey: "COS",
+        topics: [
+            { name: "History of computer", notes: "Evolution: Abacus → Mechanical calculators → Electronic computers\nGenerations: Vacuum tubes → Transistors → IC → Microprocessors", link: "https://www.britannica.com/technology/computer/History-of-computing" },
+            { name: "Basic components of computer", notes: "CPU (ALU + Control Unit), Memory (RAM/ROM), Input (keyboard, mouse), Output (monitor, printer), Storage (HDD/SSD)", link: "https://www.apu.apus.edu/area-of-study/information-technology/resources/basic-components-of-a-computer/" },
+            { name: "Introduction to Algorithms", notes: "Step-by-step procedure to solve a problem\nTime/space complexity, sorting, searching, pseudo code", link: "https://www.geeksforgeeks.org/fundamentals-of-algorithms/" },
+            { name: "Data Structures", notes: "Arrays, Linked Lists, Stack, Queue, Tree, Graph\nUsed to organize data efficiently", link: "https://www.geeksforgeeks.org/data-structures/" },
+            { name: "Internet and its applications", notes: "Global network: Communication, e-commerce, education\nProtocols: HTTP, FTP, SMTP", link: "https://www.geeksforgeeks.org/introduction-to-internet/" },
+            { name: "Programming Fundamentals", notes: "Variables, Data types, Operators, Control structures (if, for, while), Functions", link: "https://share.google/3NfXTpGmyNE1RDuEx" },
+            { name: "Operating Systems", notes: "Software managing hardware/resources\nExamples: Windows, Linux, MacOS\nFunctions: Process management, Memory management, File system", link: "https://www.geeksforgeeks.org/introduction-of-operating-system-set-1/" }
+        ]
+    },
+
+    "STA111": {
+        name: "Statistics",
+        resourceKey: "STA",
+        topics: [
+            { name: "Data Collection", notes: "Methods: Survey, Observation, Experiment, Questionnaire\nTypes: Primary (direct), Secondary (existing data)", link: "https://byjus.com/maths/data-collection-methods/" },
+            { name: "Measures of Central Tendency", notes: "Mean = Σx/n, Median = middle value, Mode = most frequent\nUsed to summarize datasets", link: "https://byjus.com/maths/central-tendency/" },
+            { name: "Probability Theory", notes: "Probability P(E) = favorable outcomes / total outcomes\nLaws: Addition, Multiplication, Complement", link: "https://utstat.utoronto.ca/mikevans/jeffrosenthal/book.pdf" },
+            { name: "Errors and Approximation", notes: "Errors: Systematic (instrumental), Random (statistical)\nApproximation: rounding, significant figures", link: "https://byjus.com/maths/absolute-and-relative-error/" }
+        ]
+    },
+
+    "STA121": {
+        name: "Statistics",
+        resourceKey: "STA",
+        topics: [
+            { name: "Population and sample", notes: "Population: entire group of interest\nSample: subset used for analysis\nSampling methods: Random, Stratified, Systematic", link: "https://byjus.com/maths/population-and-sample/" },
+            { name: "Sample distribution and proportion", notes: "Distribution: spread of sample statistics\nCentral Limit Theorem: sample mean ≈ normal\nProportion p̂ = x/n", link: "https://www.geeksforgeeks.org/maths/sampling-distribution/" },
+            { name: "Regression and correlation", notes: "Regression: predict Y from X (Y = a + bX)\nCorrelation: measures strength (-1 ≤ r ≤ 1)", link: "https://byjus.com/maths/correlation-and-regression/" },
+            { name: "Probability and elementary time analysis", notes: "Poisson & Exponential distributions for events over time\nUsed in queues, reliability, risk analysis", link: "https://byjus.com/ncert-solutions-class-10-maths/chapter-15-probability/" },
+            { name: "Hypothesis Testing", notes: "Null H₀ vs Alternative H₁\nSteps: Formulate H₀/H₁, choose α, compute statistic, make decision\nExample: Test if mean = 50", link: "https://www.geeksforgeeks.org/software-testing/understanding-hypothesis-testing/" }
+        ]
+    },
+
+    "BIO101": {
+        name: "Biology",
+        resourceKey: "BIO",
+        topics: [
+            { name: "The Cell", notes: "Basic unit of life\nComponents: Nucleus (control), Cytoplasm, Organelles (mitochondria, ribosomes, chloroplasts)\nProkaryotic vs Eukaryotic cells", link: "https://www.britannica.com/science/cell-theory" },
+            { name: "Genetics", notes: "Heredity: Mendel's laws: segregation & independent assortment\nTerms: gene, allele, genotype, phenotype, dominant, recessive", link: "https://medlineplus.gov/ency/article/002048.htm" },
+            { name: "Ecology", notes: "Interaction of organisms & environment\nLevels: Population, Community, Ecosystem\nConcepts: food chains, biotic/abiotic factors, energy flow", link: "https://byjus.com/biology/ecology/" },
+            { name: "Plant and Animal Physiology", notes: "Plant: photosynthesis, transpiration, transport\nAnimal: digestion, respiration, circulation, excretion, hormones", link: "https://www.sciencedirect.com/topics/earth-and-planetary-sciences/animal-physiology" }
+        ]
+    },
+
+    "GST": {
+        name: "General Studies (English)",
+        resourceKey: "GST",
+        topics: [
+            { name: "Language", notes: "Grammar, vocabulary, sentence formation, punctuation, spelling", link: "https://www.britannica.com/topic/language" },
+            { name: "Listening and Speaking Skills", notes: "Comprehension, pronunciation, intonation, fluency, active listening", link: "https://www.spmrcollege.org/ccadmin/files/420222109597.pdf#:~:text=Simply%20listen%20to%20how%20someone%20with%20good,Skill:%20One%20of%20the%20weaknesses%20of%20most" },
+            { name: "Speech Sounds", notes: "Phonetics: vowels, consonants, stress, rhythm, syllables", link: "https://speechandlanguage.org.uk/educators-and-professionals/resource-library-for-educators/speech-sounds/" },
+            { name: "Comprehension", notes: "Understanding passages, summarizing, answering questions, inference", link: "https://dictionary.cambridge.org/dictionary/english/comprehension" },
+            { name: "Lexis and Structure", notes: "Vocabulary, collocations, grammar, parts of speech, sentence patterns", link: "https://www.africanscholarpublications.com/wp-content/uploads/2021/10/AJHSS_Vol21_No6_June_2021-17.pdf" },
+            { name: "Parts and Figure of Speech", notes: "Simile, metaphor, personification, idioms, proverbs, onomatopoeia", link: "https://byjus.com/english/figures-of-speech/" },
+            { name: "Stress", notes: "Word stress, sentence stress, intonation, rhythm to improve pronunciation and comprehension", link: "   " }
+        ]
+    },
+
+    "GES151": {
+        name: "Agriculture",
+        resourceKey: "AGR",
+        topics: [
+            { name: "Agricultural Systems", notes: "Types: Subsistence, Commercial, Mixed, Shifting, Plantation\nIncludes crop-livestock integration, fallowing, organic farming, irrigation methods", link: "https://foodsupplyissues.weebly.com/agricultural-systems.html" },
+            
+            { name: "Crop Production", notes: "Steps: Land prep, seed selection, planting, weed control, irrigation, harvesting\nCrops: cereals (maize, rice), legumes (beans), tubers (yam, cassava)", link: "https://byjus.com/biology/crop-production/" },
+            { name: "Soil Science", notes: "Soil types, texture, structure, fertility, pH, nutrients, erosion control, fertilizer use", link: "https://geo.libretexts.org/Bookshelves/Soil_Science" },
+            { name: "Farm Machinery & Tools", notes: "Tools: simple (hoe, cutlass) & mechanized (tractors, ploughs, seeders, harvesters)\nImportance: efficiency, reduced labor, increased productivity", link: "https://www.britannica.com/technology/farm-machinery" },
+            { name: "Animal Husbandry", notes: "Rearing: cattle, sheep, goats, poultry, pigs\nIncludes feeding, breeding, disease management, milk & egg production", link: "https://byjus.com/biology/animal-husbandry-food-animals/" }
+        ]
+    }
+};
+
+// --- 2. EXTERNAL RESOURCE LINKS ---
+const EXTERNAL_RESOURCES = {
+    "MTH": "https://www.khanacademy.org/math",
+    "PHY": "https://www.physicsclassroom.com/",
+    "CHM": "https://www.khanacademy.org/chemistry",
+    "COS": "https://www.geeksforgeeks.org/computer-science-portal/",
+    "STA": "https://stattrek.com/",
+    "BIO": "https://www.khanacademy.org/science/biology",
+    "GST": "https://www.bbc.co.uk/learningenglish",
+    "AGR": "https://www.fao.org/home/en/"
+};
+
+    document.addEventListener('DOMContentLoaded', initializeNotesDisplay);
+
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+    
+    // Store the current subject code globally for use in displayNotes
+    let currentSubjectCode = null; 
+
+    function initializeNotesDisplay() {
+        currentSubjectCode = getQueryParameter('subject');
+        
+        if (!currentSubjectCode || !STUDY_CONTENT[currentSubjectCode]) {
+            document.getElementById('subjectName').textContent = "Error: Subject Not Found";
+            return;
+        }
+
+        const subjectData = STUDY_CONTENT[currentSubjectCode];
+        document.getElementById('subjectName').textContent = `${currentSubjectCode}: ${subjectData.name}`;
+
+        renderTopics(subjectData.topics);
+    }
+
+    function renderTopics(topics) {
+        const list = document.getElementById('topicList');
+        list.innerHTML = ''; 
+
+        topics.forEach((topic, index) => {
+            const card = document.createElement('div');
+            card.className = 'topic-card';
+            card.innerHTML = `<div class="topic-name">${index + 1}. ${topic.name}</div>`;
+            
+            card.onclick = () => displayNotes(topic);
+            
+            list.appendChild(card);
+        });
+    }
+
+    function displayNotes(topic) {
+    const notesArea = document.getElementById('notesDisplayArea');
+    const notesTitle = document.getElementById('notesTopicTitle');
+    const notesContent = document.getElementById('notesContent');
+    const subjectData = STUDY_CONTENT[currentSubjectCode];
+
+    // --- Display topic notes ---
+    notesTitle.textContent = `Key Notes: ${topic.name}`;
+    notesContent.textContent = topic.notes;
+
+    // --- Determine link to use ---
+    const topicLink = topic.link || EXTERNAL_RESOURCES[subjectData.resourceKey] || "#";
+
+    // --- Remove existing Read More button if any ---
+    const existingLink = document.getElementById('readMoreLink');
+    if (existingLink) existingLink.remove();
+
+    // --- Create new link and button ---
+    const readMoreLink = document.createElement('a');
+    readMoreLink.href = topicLink;
+    readMoreLink.target = "_blank"; // open in new tab
+    readMoreLink.style.display = 'block';
+    readMoreLink.style.marginTop = '20px';
+    readMoreLink.id = 'readMoreLink';
+
+    const readMoreButton = document.createElement('button');
+    readMoreButton.textContent = `Read More on ${topic.name} ↗️`;
+    readMoreButton.style.padding = '10px 15px';
+    readMoreButton.style.backgroundColor = '#28a745'; // green for visibility
+    readMoreButton.style.color = 'white';
+    readMoreButton.style.border = 'none';
+    readMoreButton.style.borderRadius = '6px';
+    readMoreButton.style.cursor = 'pointer';
+    readMoreButton.style.fontWeight = '600';
+    readMoreButton.style.transition = '0.3s';
+    readMoreButton.onmouseover = () => readMoreButton.style.backgroundColor = '#218838';
+    readMoreButton.onmouseout = () => readMoreButton.style.backgroundColor = '#28a745';
+
+    readMoreLink.appendChild(readMoreButton);
+    notesArea.appendChild(readMoreLink);
+
+    notesArea.style.display = 'block';
+    notesArea.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

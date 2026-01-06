@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Study Hub - Results</title>
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --accent-color: #28a745;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --dark-text: #343a40;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .results-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        .subject-info {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+        
+        /* --- Summary Cards --- */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .summary-card {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .score-card { background-color: var(--primary-color); }
+        .correct-card { background-color: var(--success-color); }
+        .incorrect-card { background-color: var(--danger-color); }
+        .unanswered-card { background-color: var(--secondary-color); }
+
+        .summary-card h3 {
+            margin: 0 0 5px 0;
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+        .summary-card p {
+            margin: 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* --- Review Section --- */
+        .review-section h2 {
+            border-left: 5px solid var(--warning-color);
+            padding-left: 10px;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+        }
+        .question-review {
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: #fafafa;
+        }
+        .question-review.correct {
+            border-left: 5px solid var(--success-color);
+        }
+        .question-review.incorrect, .question-review.unanswered {
+            border-left: 5px solid var(--danger-color);
+        }
+        
+        .question-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 10px;
+        }
+        .topic-tag {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .review-option {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .review-option.correct-answer {
+            background-color: #d4edda; /* Light green */
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        .review-option.user-incorrect {
+            background-color: #f8d7da; /* Light red */
+            color: var(--danger-color);
+            font-weight: 600;
+            border: 1px dashed var(--danger-color);
+        }
+        .review-option.unanswered-label {
+            background-color: #fff3cd; /* Light yellow */
+            color: var(--warning-color);
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 30px;
+        }
+        .action-buttons button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        #homeBtn {
+            background-color: var(--primary-color);
+            color: white;
+            margin-right: 10px;
+        }
+        #homeBtn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="results-container">
+    <div class="header">
+        <h1 id="resultTitle">Test Results</h1>
+        <p class="subject-info" id="subjectInfo"></p>
+        <p id="timeTaken"></p>
+    </div>
+
+    <div class="summary-grid">
+        <div class="summary-card score-card">
+            <h3 id="scoreDisplay">--%</h3>
+            <p>Percentage Score</p>
+        </div>
+        <div class="summary-card correct-card">
+            <h3 id="correctCount">0</h3>
+            <p>Correct Answers</p>
+        </div>
+        <div class="summary-card incorrect-card">
+            <h3 id="incorrectCount">0</h3>
+            <p>Incorrect Answers</p>
+        </div>
+        <div class="summary-card unanswered-card">
+            <h3 id="unansweredCount">0</h3>
+            <p>Unanswered</p>
+        </div>
+    </div>
+
+    <div class="review-section">
+        <h2>Detailed Answer Review</h2>
+        <div id="reviewContainer">
+            </div>
+    </div>
+    
+  <div class="action-buttons">
+    <button id="homeBtn" onclick="returnToHome()">
+        Return to Home
+    </button>
+    <button id="unlockBtn" onclick="goToPayment()" style="background-color: #ffc107; color: #333; margin-left: 10px;">
+        💰 Unlock All Subjects
+    </button>
+</div>
+
+<script>
+function goToPayment() {
+    const subject = localStorage.getItem('currentSubject') || 'General';
+    window.location.href = `payment.html?subject=${subject}`;
+}
+</script>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', loadResults);
+
+    let results = null;
+
+    function loadResults() {
+        const storedResults = localStorage.getItem('cbtResults');
+        
+        if (!storedResults) {
+            document.getElementById('resultTitle').textContent = "No Results Found";
+            document.getElementById('subjectInfo').textContent = "Please take a test first.";
+            document.getElementById('reviewContainer').innerHTML = "<p style='text-align:center;'>Redirecting to home...</p>";
+            
+            // Redirect to home if no results are found
+            setTimeout(() => {
+                window.location.href = 'home.html';
+            }, 3000);
+            return;
+        }
+
+        results = JSON.parse(storedResults);
+        displaySummary();
+        renderReview();
+        
+        // Clear results after displaying to prepare for the next test
+        localStorage.removeItem('cbtResults');
+    }
+
+    function displaySummary() {
+        const durationMinutes = Math.floor(results.duration / 60);
+        const durationSeconds = results.duration % 60;
+
+        document.getElementById('subjectInfo').textContent = 
+            `Subject: ${results.subject} | Mode: ${results.mode.toUpperCase()}`;
+        document.getElementById('timeTaken').textContent = 
+            results.mode === 'exam' 
+            ? `Time Taken: ${durationMinutes}m ${durationSeconds}s`
+            : 'Practice Session (No Time Limit)';
+
+        document.getElementById('scoreDisplay').textContent = `${results.percentage}%`;
+        document.getElementById('correctCount').textContent = results.score;
+        document.getElementById('incorrectCount').textContent = results.incorrect;
+        document.getElementById('unansweredCount').textContent = results.unanswered;
+    }
+
+    function renderReview() {
+        const container = document.getElementById('reviewContainer');
+        container.innerHTML = '';
+        
+        results.questions.forEach((qData, index) => {
+            const userAnswer = results.userAnswers[index];
+            const isCorrect = userAnswer === qData.ans;
+            const isAnswered = userAnswer !== null;
+
+            const reviewDiv = document.createElement('div');
+            reviewDiv.className = `question-review ${isCorrect ? 'correct' : (isAnswered ? 'incorrect' : 'unanswered')}`;
+
+            let statusIcon = '';
+            if (isCorrect) {
+                statusIcon = '✅ Correct';
+            } else if (isAnswered) {
+                statusIcon = '❌ Incorrect';
+            } else {
+                statusIcon = '❓ Unanswered';
+            }
+
+            reviewDiv.innerHTML = `
+                <div class="question-title">Q${index + 1}. ${qData.q} <span style="float:right; color: ${isCorrect ? 'var(--success-color)' : 'var(--danger-color)'};">${statusIcon}</span></div>
+                <span class="topic-tag">Topic: ${qData.topic}</span>
+                <div class="options-list">
+                    ${qData.options.map((option, i) => {
+                        let optionClass = 'review-option';
+                        const optionLetter = String.fromCharCode(65 + i);
+                        const isUserAnswer = option === userAnswer;
+                        const isCorrectAnswer = option === qData.ans;
+                        
+                        if (isCorrectAnswer) {
+                            optionClass += ' correct-answer';
+                        }
+                        if (isUserAnswer && !isCorrect) {
+                            optionClass += ' user-incorrect';
+                        }
+                        
+                        return `<p class="${optionClass}">(${optionLetter}) ${option}</p>`;
+                    }).join('')}
+                    ${!isAnswered ? `<p class="review-option unanswered-label">User did not select an answer.</p>` : ''}
+                </div>
+            `;
+
+            container.appendChild(reviewDiv);
+        });
+    }
+
+    function returnToHome() {
+        window.location.href = 'home.html';
+    }
+</script>
+</body>
+</html>

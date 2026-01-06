@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codex Study Hub - Home</title>
+
+  <!-- Google AdSense Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #007bff;
+      --accent-color: #28a745;
+      --secondary-color: #6c757d;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --border-color: #e9ecef;
+      --animation-duration: 0.6s;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 800px;
+      padding: 2rem;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeInScale var(--animation-duration) forwards ease-out;
+    }
+
+    @keyframes fadeInScale {
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .welcome-text {
+      font-size: 1.5rem;
+      color: #343a40;
+      margin: 0;
+    }
+
+    .user-name {
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    .logout-btn {
+      padding: 0.5rem 1rem;
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .logout-btn:hover {
+      background-color: #495057;
+    }
+
+    /* --- Ad Banner --- */
+    #adBanner {
+      background-color: #f0f0f0;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      margin: 20px 0;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* --- Unlock All Button --- */
+    .unlock-all-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 20px 0;
+      background: linear-gradient(135deg, #28a745, #218838);
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .unlock-all-btn:hover {
+      background: linear-gradient(135deg, #218838, #1e7e34);
+    }
+
+    /* --- Category Grid --- */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .category-card {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 25px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-color);
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      color: var(--accent-color);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #343a40;
+    }
+
+    .card-description {
+      font-size: 0.9rem;
+      color: var(--secondary-color);
+      margin-top: 5px;
+    }
+  /* Marathon Flowing Ticker */
+.ticker-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #343a40;
+  color: #fff;
+  padding: 10px 0;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.ticker-text {
+  display: inline-block;
+  white-space: nowrap;
+  padding-left: 100%;
+  animation: ticker 25s linear infinite;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes ticker {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+/* Leaderboard Specific Card Style */
+.leaderboard-card {
+  background: linear-gradient(135deg, #ffc107, #ff9800) !important;
+  color: white !important;
+  border: none !important;
+}
+.leaderboard-card .card-title { color: white !important; }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="homeAppShell">
+    <div class="header-section">
+      <h1 class="welcome-text">
+        Welcome, <span id="userName" class="user-name">Guest</span>!
+      </h1>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+
+
+
+    <!-- Unlock All Button -->
+    <button class="unlock-all-btn" onclick="goToPayment()">Unlock All Subjects Now (Pro)</button>
+
+    <h2>Codex Study Hub Categories</h2>
+    <div class="category-grid">
+      <div class="category-card" onclick="goToCategory('notes')">
+        <div class="card-icon">📘</div>
+        <div class="card-title">Read / Study Notes</div>
+        <div class="card-description">Access short notes, definitions, and formulas.</div>
+      </div>
+      <div class="category-card" onclick="goToCategory('practice')">
+        <div class="card-icon">🧠</div>
+        <div class="card-title">Topic Practice</div>
+        <div class="card-description">Choose a specific topic and set your own questions.</div>
+      </div>
+      <div class="category-card" onclick="goToCategory('exam')">
+        <div class="card-icon">📝</div>
+        <div class="card-title">Exam Simulation</div>
+        <div class="card-description">Timed, 50-question mock exams (30 mins).</div>
+      </div>
+      <div class="category-card" onclick="goToCategory('profile')">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Stats & Progress</div>
+        <div class="card-description">Track your scores, history, and weak topics.</div>
+      </div>
+    </div>
+    <div class="category-card leaderboard-card" onclick="window.location.href='leaderboard.html'">
+  <div class="card-icon">🏆</div>
+  <div class="card-title">Leaderboard</div>
+  <div class="card-description">See the Daily Marathon Winners!</div>
+</div>
+  </div>
+  
+
+  <script>
+    const SESSION_KEY = 'loggedInUser';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeHome();
+      pushAdsbygoogle();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+    function initializeHome() {
+      const session = localStorage.getItem(SESSION_KEY);
+      if (!session) {
+        window.location.href = 'index.html';
+        return;
+      }
+      try {
+        const userData = JSON.parse(session);
+        document.getElementById('userName').textContent = userData.fullName.split(' ')[0];
+      } catch (e) {
+        console.error("Error parsing user session:", e);
+        localStorage.removeItem(SESSION_KEY);
+        window.location.href = 'index.html';
+      }
+    }
+
+    function pushAdsbygoogle() {
+      if (window.adsbygoogle) {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    }
+
+    function handleLogout() {
+      if (confirm('Are you sure you want to log out?')) {
+        localStorage.removeItem(SESSION_KEY);
+        window.location.href = 'Login.html';
+      }
+    }
+
+    function goToCategory(mode) {
+      if (mode === 'notes') window.location.href = `subject_selection.html?mode=read`;
+      else if (mode === 'practice' || mode === 'exam') window.location.href = `subject_selection.html?mode=practice`;
+      else if (mode === 'profile') window.location.href = 'stats.html';
+    }
+
+    function goToPayment() {
+      window.location.href = 'payment.html';
+    }
+  </script>
+  <div class="ticker-wrapper">
+  <div class="ticker-text">
+    🔥 CODEXHUB 3-DAY MARATHON CHALLENGE HAS STARTED! 📍 DAY 1: MTH101 | 📍 DAY 2: GST101 | 📍 DAY 3: GES151 & PHY 🚀 TAKE THE CHALLENGE IN EXAM MODE NOW! 🏆 WIN AIRTIME AND ACTIVATION KEYS! 🔓
+  </div>
+</div>
+</body>
+</html>

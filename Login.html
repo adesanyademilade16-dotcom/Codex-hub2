@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codex Study Hub - Log In</title>
+        <style>
+        :root {  
+            --primary-color: #007bff;
+            --accent-color: #28a745;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #ced4da;
+            --animation-duration: 0.5s;  
+        }  
+        body {  
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  
+            background-color: var(--bg-color);  
+            display: flex;  
+            justify-content: center;  
+            align-items: center;  
+            min-height: 100vh;  
+            margin: 0;  
+            overflow: hidden; 
+        }  
+        .container {  
+            width: 100%;  
+            max-width: 400px;  
+            padding: 2rem;  
+            background: var(--card-bg);  
+            border-radius: 12px;  
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);  
+            transform: translateY(30px);  
+            opacity: 0;  
+            animation: slideUp var(--animation-duration) forwards ease-out;  
+        }  
+        @keyframes slideUp {  
+            from { transform: translateY(30px); opacity: 0; }  
+            to { transform: translateY(0); opacity: 1; }  
+        }  
+        .header {  
+            text-align: center;  
+            margin-bottom: 2rem;  
+        }  
+        h2 {  
+            font-size: 1.4rem;  
+            color: #343a40;  
+            margin-top: 0.5rem;  
+        }  
+        .form-group {  
+            margin-bottom: 1.2rem;  
+        }  
+        label {  
+            display: block;  
+            margin-bottom: 0.3rem;  
+            font-weight: 500;  
+            color: #495057;  
+        }  
+        input {  
+            width: 100%;  
+            padding: 0.75rem;  
+            border: 1px solid var(--border-color);  
+            border-radius: 6px;  
+            box-sizing: border-box;  
+            transition: border-color 0.3s, box-shadow 0.3s;  
+        }  
+        input:focus {  
+            border-color: var(--primary-color);  
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);  
+            outline: none;  
+        }  
+        .btn {  
+            width: 100%;  
+            padding: 0.75rem;  
+            background-color: var(--primary-color);  
+            color: white;  
+            border: none;  
+            border-radius: 6px;  
+            font-size: 1rem;  
+            cursor: pointer;  
+            transition: background-color 0.3s, transform 0.1s;  
+            margin-top: 1rem;  
+        }  
+        .btn:hover {  
+            background-color: #0056b3;  
+        }  
+        .btn:active {  
+            transform: scale(0.99); 
+        }  
+        .link-text {  
+            text-align: center;  
+            margin-top: 1.5rem;  
+        }  
+        .link-text a {  
+            color: var(--primary-color);  
+            text-decoration: none;  
+            font-weight: 600;  
+        }  
+        .error-message {  
+            color: #dc3545;  
+            text-align: center;  
+            margin-bottom: 1rem;  
+            font-weight: 600;  
+            display: none;  
+        }  
+        .cbt-logo {  
+            width: 100px;  
+            height: auto;  
+            margin: 0 auto;  
+            display: block;  
+            animation: fadeIn 0.6s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <img src="logo.png" alt="Codex Study Hub Logo" class="cbt-logo">
+        <h2>Log in to Continue</h2>
+    </div>
+
+    <div id="error-message" class="error-message"></div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" required placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+        </div>
+          
+        <button type="submit" class="btn">Log In</button>
+    </form>
+
+    <div class="link-text">
+        Don't have an account? <a href="signup.html">Sign Up</a>
+    </div>
+</div>
+
+<script>
+    const USERS_KEY = 'cbtUsers';
+    const SESSION_KEY = 'loggedInUser';
+
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+    function handleLogin(event) {
+        event.preventDefault();
+        const form = event.target;
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.style.display = 'none';
+          
+        const email = form.email.value.trim().toLowerCase();
+        const password = form.password.value;
+
+        const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+          
+        // FIND USER BY EMAIL ONLY (NO JAMB REG)
+        const userFound = users.find(user => user.email === email);
+
+        if (!userFound) {
+            return displayError("❌ Email not found. Please sign up first.");
+        }
+
+        try {
+            if (password === userFound.password) {
+                const sessionData = {
+                    id: userFound.id,
+                    fullName: userFound.fullName,
+                    email: userFound.email
+                };
+
+                localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+                window.location.href = 'home.html';
+
+            } else {
+                return displayError("❌ Incorrect password. Please try again.");
+            }
+
+        } catch (error) {
+            console.error("Error during login:", error);
+            displayError("An unexpected error occurred. Please try again.");
+        }
+    }
+
+    function displayError(message) {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+        document.getElementById('password').value = '';
+        return false;
+    }
+</script>
+</body>
+</html>
