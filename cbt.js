@@ -88,6 +88,133 @@ const CBT_DATA = {
     { q: "The union of the set of rational and irrational numbers is:", options: ["Real numbers", "Complex numbers", "Integers", "Whole numbers"], ans: "Real numbers", topic: "Number Systems" },
     // --- 10 Questions for Set Theory ---
     
+    
+  {
+    q: "In a class of 120 students, 65 study Mathematics, 70 study Physics and 45 study both Mathematics and Physics. How many students study neither Mathematics nor Physics?",
+    options: ["30", "25", "20", "15"],
+    ans: "30",
+    topic: "Set Theory"
+  },
+  {
+    q: "If A = {x : x is an integer, −3 ≤ x ≤ 5} and B = {x : x is an even integer}, find n(A ∩ B).",
+    options: ["4", "5", "6", "7"],
+    ans: "4",
+    topic: "Set Theory"
+  },
+  {
+    q: "In a survey of 200 people, 120 like football, 90 like basketball and 50 like both. How many like football only?",
+    options: ["70", "50", "30", "40"],
+    ans: "70",
+    topic: "Set Theory"
+  },
+  {
+    q: "If U = {1,2,3,…,20} and A = {multiples of 3}, find n(A′).",
+    options: ["13", "14", "12", "15"],
+    ans: "14",
+    topic: "Set Theory"
+  },
+  {
+    q: "If n(A) = 18, n(B) = 25 and n(A ∪ B) = 35, find n(A ∩ B).",
+    options: ["8", "7", "6", "5"],
+    ans: "8",
+    topic: "Set Theory"
+  },
+  {
+    q: "Given A = {x : x² − 9 = 0} and B = {−3, 3, 5}, find A ∩ B.",
+    options: ["{−3, 3}", "{3}", "{−3}", "{5}"],
+    ans: "{−3, 3}",
+    topic: "Set Theory"
+  },
+  {
+    q: "If A ⊂ B and n(A) = 7, n(B) = 15, how many subsets does B have that are not subsets of A?",
+    options: ["32768", "32640", "128", "256"],
+    ans: "32640",
+    topic: "Set Theory"
+  },
+  {
+    q: "In a class, 40 students offer Biology, 35 offer Chemistry and 10 offer neither. If the total number of students is 60, how many offer both Biology and Chemistry?",
+    options: ["15", "10", "5", "20"],
+    ans: "15",
+    topic: "Set Theory"
+  },
+  {
+    q: "If A = {1,2,3,4,5} and B = {3,4,5,6,7}, find A − B.",
+    options: ["{1,2}", "{3,4}", "{6,7}", "{1,2,3}"],
+    ans: "{1,2}",
+    topic: "Set Theory"
+  },
+  {
+    q: "How many elements are in the power set of A = {a,b,c,d,e}?",
+    options: ["10", "16", "32", "64"],
+    ans: "32",
+    topic: "Set Theory"
+  },
+  {
+    q: "If n(U) = 50, n(A) = 28 and n(A′) = x, find x.",
+    options: ["22", "28", "50", "14"],
+    ans: "22",
+    topic: "Set Theory"
+  },
+  {
+    q: "In a group of students, 55 like rice, 45 like beans and 20 like both. How many like beans only?",
+    options: ["25", "20", "35", "30"],
+    ans: "25",
+    topic: "Set Theory"
+  },
+  {
+    q: "If A and B are disjoint sets such that n(A) = 9 and n(B) = 11, find n(A ∪ B).",
+    options: ["20", "19", "18", "11"],
+    ans: "20",
+    topic: "Set Theory"
+  },
+  {
+    q: "If A = {x : 1 ≤ x ≤ 10, x ∈ ℕ} and B = {prime numbers less than 10}, find n(A ∪ B).",
+    options: ["10", "9", "8", "7"],
+    ans: "10",
+    topic: "Set Theory"
+  },
+  {
+    q: "How many subsets of the set {1,2,3,4,5,6} contain exactly 3 elements?",
+    options: ["20", "15", "10", "6"],
+    ans: "20",
+    topic: "Set Theory"
+  },
+  {
+    q: "If n(A ∪ B) = 40, n(A) = 22 and n(B ∩ A) = 8, find n(B).",
+    options: ["26", "24", "20", "18"],
+    ans: "26",
+    topic: "Set Theory"
+  },
+  {
+    q: "Which of the following statements is TRUE?",
+    options: [
+      "Every set has exactly two complements",
+      "The empty set has one element",
+      "The universal set has no complement",
+      "The complement of a complement of a set is the set itself"
+    ],
+    ans: "The complement of a complement of a set is the set itself",
+    topic: "Set Theory"
+  },
+  {
+    q: "If A = {1,3,5,7} and B = {2,4,6,8}, then A ∩ B equals:",
+    options: ["{1,2}", "∅", "{3,5}", "{2,4}"],
+    ans: "∅",
+    topic: "Set Theory"
+  },
+  {
+    q: "In a school, 90 students play football, 60 play volleyball and 30 play both. How many play at least one of the games?",
+    options: ["120", "150", "180", "90"],
+    ans: "120",
+    topic: "Set Theory"
+  },
+  {
+    q: "If A has 4 elements, how many proper subsets does A have?",
+    options: ["15", "14", "16", "8"],
+    ans: "14",
+    topic: "Set Theory"
+  },
+
     {
         q: "Let A = {1, 2} and B = {3, 4}. Find the number of elements in the Power Set of (A × B).",
         options: ["16", "8", "4", "32"],
@@ -458,7 +585,147 @@ const CBT_DATA = {
         topic: "Sequences & Series"
     },
 
-    // --- 10 Questions for Quadratic Equations ---
+  {
+    q: "If α and β are the roots of the equation x² − 5x + 6 = 0, find α + β.",
+    options: ["6", "5", "−5", "11"],
+    ans: "5",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are the roots of x² − 7x + 10 = 0, find αβ.",
+    options: ["10", "7", "17", "−10"],
+    ans: "10",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "Given that α and β are the roots of 2x² − 3x − 5 = 0, find α + β.",
+    options: ["3/2", "−3/2", "5/2", "−5/2"],
+    ans: "3/2",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are the roots of x² + 4x + 1 = 0, find α² + β².",
+    options: ["14", "12", "10", "16"],
+    ans: "14",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are the roots of 3x² − 5x + 2 = 0, find 1/α + 1/β.",
+    options: ["5/2", "2/5", "5/3", "3/5"],
+    ans: "5/2",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "Find the quadratic equation whose roots are 2 and −3.",
+    options: [
+      "x² + x − 6 = 0",
+      "x² − x − 6 = 0",
+      "x² + x + 6 = 0",
+      "x² − x + 6 = 0"
+    ],
+    ans: "x² + x − 6 = 0",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are the roots of x² − 4x + 1 = 0, find α³ + β³.",
+    options: ["52", "28", "16", "64"],
+    ans: "52",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are roots of x² + px + 9 = 0 and α = 3β, find p.",
+    options: ["−6", "6", "−12", "12"],
+    ans: "−6",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If the roots of x² + 6x + k = 0 are equal, find k.",
+    options: ["9", "18", "36", "6"],
+    ans: "9",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are roots of x² − 3x − 1 = 0, find (α − β)².",
+    options: ["13", "5", "9", "7"],
+    ans: "13",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "Find the quadratic equation whose roots are the reciprocals of the roots of x² − 5x + 2 = 0.",
+    options: [
+      "2x² − 5x + 1 = 0",
+      "x² − 5x + 2 = 0",
+      "2x² + 5x + 1 = 0",
+      "x² + 5x + 2 = 0"
+    ],
+    ans: "2x² − 5x + 1 = 0",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α + β = 4 and αβ = −5, find the quadratic equation.",
+    options: [
+      "x² − 4x − 5 = 0",
+      "x² + 4x − 5 = 0",
+      "x² − 4x + 5 = 0",
+      "x² + 4x + 5 = 0"
+    ],
+    ans: "x² − 4x − 5 = 0",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If one root of 2x² + kx + 8 = 0 is double the other, find k.",
+    options: ["±4", "±8", "±6", "±10"],
+    ans: "±4",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "For what value of m will the equation x² + 2mx + (m − 3) = 0 have equal roots?",
+    options: ["4", "3", "−3", "6"],
+    ans: "4",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are the roots of x² − x − 1 = 0, find α/β + β/α.",
+    options: ["3", "1", "−3", "5"],
+    ans: "3",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "The sum of the roots of ax² + 7x + 10 = 0 is equal to the product of its roots. Find a.",
+    options: ["2", "5", "7", "10"],
+    ans: "5",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are roots of x² + px + q = 0, which of the following represents α²β + αβ²?",
+    options: ["pq", "p²q", "−pq", "q²"],
+    ans: "pq",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If the roots of 3x² − 2x + k = 0 are real and equal, find k.",
+    options: ["1/3", "1", "2/3", "4/3"],
+    ans: "1/3",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are roots of x² − 6x + 5 = 0, find the roots of the equation whose roots are α + 1 and β + 1.",
+    options: [
+      "x² − 8x + 12 = 0",
+      "x² − 6x + 6 = 0",
+      "x² − 8x + 10 = 0",
+      "x² − 7x + 6 = 0"
+    ],
+    ans: "x² − 8x + 12 = 0",
+    topic: "Quadratic Equations"
+  },
+  {
+    q: "If α and β are roots of x² − 2x − 7 = 0, find α² + β² − αβ.",
+    options: ["18", "14", "21", "11"],
+    ans: "18",
+    topic: "Quadratic Equations"
+  },
+
     {
         q: "Find the roots of the equation x^2 - 5x + 6 = 0.",
         options: ["x=2, x=3", "x=-2, x=3", "x=-2, x=-3", "x=1, x=6"],
@@ -519,9 +786,129 @@ const CBT_DATA = {
         ans: "2",
         topic: "Quadratic Equations"
     },
-    
-    // --- 10 Questions for Complex Numbers ---
+  
+   {
+        q: "Express the complex number z = 1 + i in exponential form.",
+        options: ["√2 e^{iπ/4}", "2 e^{iπ/4}", "√2 e^{iπ/2}", "e^{iπ/4}"],
+        ans: "√2 e^{iπ/4}",
+        topic: "Complex Numbers"
+    },
     {
+        q: "Convert z = -3 + 3i to exponential form.",
+        options: ["3√2 e^{i3π/4}", "3√2 e^{iπ/4}", "6 e^{i3π/4}", "3 e^{i5π/4}"],
+        ans: "3√2 e^{i3π/4}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Write z = 4(cos 60° + i sin 60°) in exponential form.",
+        options: ["4 e^{iπ/3}", "4 e^{iπ/6}", "2 e^{iπ/3}", "4 e^{iπ/2}"],
+        ans: "4 e^{iπ/3}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Convert z = 5(cos π/3 + i sin π/3) to exponential form.",
+        options: ["5 e^{iπ/3}", "5 e^{iπ/6}", "e^{i5π/3}", "5 e^{i2π/3}"],
+        ans: "5 e^{iπ/3}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Write the exponential form of a complex number with modulus 6 and argument 90°.",
+        options: ["6 e^{iπ/2}", "6 e^{iπ}", "6 e^{i3π/2}", "6 e^{i0}"],
+        ans: "6 e^{iπ/2}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "If z = 7e^{iπ/6}, express it in a + bi form.",
+        options: ["(7√3)/2 + 3.5i", "3.5 + (7√3)/2 i", "7 + 7i", "√3 + i"],
+        ans: "(7√3)/2 + 3.5i",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Find the exponential form of z = 3 - 3√3i.",
+        options: ["6 e^{-iπ/3}", "6 e^{iπ/3}", "6 e^{i5π/3}", "Both A and C are correct"],
+        ans: "Both A and C are correct",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Using De Moivre's Theorem, find (1 + i)⁸.",
+        options: ["16", "16i", "32", "64"],
+        ans: "16",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "What is the value of e^{iπ} + 1?",
+        options: ["0", "1", "2i", "-1"],
+        ans: "0",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "The product of z1 = 2e^{iπ/6} and z2 = 3e^{iπ/3} is:",
+        options: ["6e^{iπ/2}", "6e^{iπ/18}", "5e^{iπ/2}", "6e^{iπ/4}"],
+        ans: "6e^{iπ/2}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Simplify (e^{iθ} + e^{-iθ}) / 2.",
+        options: ["cos θ", "sin θ", "i sin θ", "tan θ"],
+        ans: "cos θ",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Find the cube roots of unity in exponential form.",
+        options: ["1, e^{i2π/3}, e^{i4π/3}", "1, e^{iπ/3}, e^{i2π/3}", "1, e^{iπ/2}, e^{iπ}", "e^{iπ/3}, e^{iπ}, e^{i2π}"],
+        ans: "1, e^{i2π/3}, e^{i4π/3}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "If z = r(cos θ + i sin θ), then z⁻¹ is:",
+        options: ["(1/r)e^{-iθ}", "re^{-iθ}", "(1/r)e^{iθ}", "-re^{iθ}"],
+        ans: "(1/r)e^{-iθ}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Express z = -5 in exponential form.",
+        options: ["5 e^{iπ}", "5 e^{i0}", "-5 e^{iπ}", "5 e^{iπ/2}"],
+        ans: "5 e^{iπ}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Calculate the modulus of z = e^{3 + 4i}.",
+        options: ["e³", "e⁴", "5", "e⁵"],
+        ans: "e³",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "The argument of the complex number z = e^{i²} is:",
+        options: ["-1 radian", "1 radian", "i radians", "0"],
+        ans: "-1 radian",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Convert z = 2i to exponential form.",
+        options: ["2 e^{iπ/2}", "2 e^{iπ}", "2 e^{i3π/2}", "e^{iπ/2}"],
+        ans: "2 e^{iπ/2}",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "If z = √3 + i, find z⁶.",
+        options: ["-64", "64", "64i", "-64i"],
+        ans: "-64",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "Evaluate |e^{iθ}| for any real θ.",
+        options: ["1", "θ", "cos θ", "0"],
+        ans: "1",
+        topic: "Complex Numbers"
+    },
+    {
+        q: "The square root of i is:",
+        options: ["e^{iπ/4}", "e^{iπ/2}", "i", "±e^{iπ/4}"],
+        ans: "±e^{iπ/4}",
+        topic: "Complex Numbers"
+    },
+
+  {
         q: "Simplify the expression i^{10}.",
         options: ["i", "-i", "1", "-1"],
         ans: "-1",
@@ -583,6 +970,128 @@ const CBT_DATA = {
     },
 
     // --- 10 Questions for Trigonometry ---
+    
+  {
+    q: "Evaluate sin 30° + cos 60°.",
+    options: ["1", "1/2", "√3", "0"],
+    ans: "1",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Find the value of tan 45° × sin 30°.",
+    options: ["1/2", "1", "√3/2", "0"],
+    ans: "1/2",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Simplify: sin² 45° + cos² 45°.",
+    options: ["1", "0", "1/2", "√2"],
+    ans: "1",
+    topic: "Trigonometry"
+  },
+  {
+    q: "If sin θ = 1/2 and θ is acute, find cos θ.",
+    options: ["√3/2", "1/2", "√2/2", "1"],
+    ans: "√3/2",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Evaluate tan 60° − sin 30°.",
+    options: ["√3 − 1/2", "1", "√3/2", "1/2"],
+    ans: "√3 − 1/2",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Simplify: (1 − tan² 45°) / (1 + tan² 45°).",
+    options: ["0", "1", "−1", "2"],
+    ans: "0",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Find the value of sin 60° cos 30° + sin 30° cos 60°.",
+    options: ["1", "√3/2", "1/2", "0"],
+    ans: "1",
+    topic: "Trigonometry"
+  },
+  {
+    q: "If tan θ = √3 and 0° < θ < 90°, find θ.",
+    options: ["30°", "45°", "60°", "90°"],
+    ans: "60°",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Simplify: 1 + tan² 30°.",
+    options: ["4/3", "1/3", "3", "2"],
+    ans: "4/3",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Evaluate: sin 90° − cos 0°.",
+    options: ["0", "1", "−1", "2"],
+    ans: "0",
+    topic: "Trigonometry"
+  },
+  {
+    q: "If sin θ = 3/5, find tan θ.",
+    options: ["3/4", "4/3", "5/3", "3/5"],
+    ans: "3/4",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Simplify: (sin 45° + cos 45°)².",
+    options: ["2", "1", "√2", "4"],
+    ans: "2",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Evaluate: cos 60° / sin 30°.",
+    options: ["1", "2", "1/2", "0"],
+    ans: "1",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Which of the following is equal to sec θ?",
+    options: ["1/cos θ", "1/sin θ", "sin θ/cos θ", "cos θ/sin θ"],
+    ans: "1/cos θ",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Find the value of sin 30° cos 60°.",
+    options: ["1/4", "1/2", "√3/4", "0"],
+    ans: "1/4",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Simplify: tan 45° + cot 45°.",
+    options: ["2", "1", "0", "−1"],
+    ans: "2",
+    topic: "Trigonometry"
+  },
+  {
+    q: "If cos θ = 4/5, where θ is acute, find sin θ.",
+    options: ["3/5", "4/5", "5/4", "1/5"],
+    ans: "3/5",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Evaluate: sin² 30° − cos² 60°.",
+    options: ["0", "1/2", "−1/2", "1"],
+    ans: "0",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Find the value of tan 30° × cot 60°.",
+    options: ["1/3", "1", "√3", "0"],
+    ans: "1/3",
+    topic: "Trigonometry"
+  },
+  {
+    q: "Simplify: sin 0° + cos 90°.",
+    options: ["0", "1", "−1", "2"],
+    ans: "0",
+    topic: "Trigonometry"
+  },
+
     {
         q: "The value of \\sin(30^{ degrees}) is:",
         options: ["1/2", "\\frac{sqrt(3)}{2}", "1", "\\frac{sqrt(2)}{2}"],
